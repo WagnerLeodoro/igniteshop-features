@@ -5,7 +5,6 @@ export const HomeContainer = styled("main", {
   display: "flex",
   width: "100%",
   maxWidth: "calc(100vw - ((100vw - 1180px) / 2))",
-  marginLeft: "auto",
 });
 
 export const Product = styled(Link, {
@@ -21,6 +20,13 @@ export const Product = styled(Link, {
 
   img: {
     objectFit: "cover",
+  },
+
+  button: {
+    border: 0,
+    background: "transparent",
+    color: "$gray100",
+    cursor: "pointer",
   },
 
   footer: {
@@ -87,6 +93,42 @@ export const Product = styled(Link, {
     footer: {
       transform: "translateY(0%)",
       opacity: 1,
+    },
+  },
+});
+
+export const ArrowButton = styled("button", {
+  position: "absolute",
+  top: "50%",
+  transform: "translateY(-50%)",
+  width: "8.5rem",
+  height: "100%",
+  background:
+    "linear-gradient(270deg, rgba(18, 18, 20, 0) 0%, rgba(18, 18, 20, 0.75) 100%)",
+  cursor: "pointer",
+  border: "none",
+  outline: "none",
+  color: "$white",
+  fill: "$white",
+  padding: "0 1rem",
+
+  variants: {
+    direction: {
+      left: {
+        left: 0,
+        textAlign: "left",
+      },
+      right: {
+        right: 0,
+        textAlign: "right",
+        background:
+          "linear-gradient(90deg, rgba(18, 18, 20, 0) 0%, rgba(18, 18, 20, 0.75) 100%)",
+      },
+    },
+    disabled: {
+      true: {
+        opacity: 0.5,
+      },
     },
   },
 });
