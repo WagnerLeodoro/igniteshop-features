@@ -10,7 +10,6 @@ export const HomeContainer = styled("main", {
 export const Product = styled(Link, {
   background: "linear-gradient(180deg, #1ea483 0%, #7465d4 100%)",
   borderRadius: 8,
-  cursor: "pointer",
   position: "relative",
   overflow: "hidden",
 
@@ -20,13 +19,6 @@ export const Product = styled(Link, {
 
   img: {
     objectFit: "cover",
-  },
-
-  button: {
-    border: 0,
-    background: "transparent",
-    color: "$gray100",
-    cursor: "pointer",
   },
 
   footer: {
@@ -70,23 +62,6 @@ export const Product = styled(Link, {
       fontWeight: "bold",
       color: "$green300",
     },
-
-    ".cart-icon": {
-      display: "flex",
-      flexDirection: "row",
-      alignItems: "center",
-      padding: 12,
-      gap: 12,
-      border: 0,
-      color: "white",
-      cursor: "pointer",
-
-      width: 56,
-      height: 56,
-
-      background: "$green300",
-      borderRadius: 6,
-    },
   },
 
   "&:hover": {
@@ -128,6 +103,46 @@ export const ArrowButton = styled("button", {
     disabled: {
       true: {
         opacity: 0.5,
+      },
+    },
+  },
+});
+
+export const CartButtonContainer = styled("button", {
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  padding: 12,
+  gap: 12,
+  border: 0,
+  color: "white",
+  cursor: "pointer",
+
+  borderRadius: 6,
+
+  variants: {
+    color: {
+      green: {
+        color: "$gray100",
+        backgroundColor: "$green500",
+
+        "&:hover": {
+          backgroundColor: "$green300",
+        },
+      },
+      gray: {
+        color: "$gray500",
+        backgroundColor: "$gray800",
+      },
+    },
+    size: {
+      sm: {
+        width: 48,
+        height: 48,
+      },
+      md: {
+        width: 56,
+        height: 56,
       },
     },
   },
