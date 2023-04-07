@@ -1,3 +1,5 @@
+import { IProduct } from "@/context/CartContext";
+import { useCart } from "@/hooks/useCart";
 import { stripe } from "@/lib/stripe";
 import {
   ImageContainer,
@@ -10,34 +12,14 @@ import Image from "next/image";
 import { useState } from "react";
 import Stripe from "stripe";
 interface ProductProps {
-  product: {
-    id: string;
-    name: string;
-    imageUrl: string;
-    price: string;
-    description: string;
-    defaultPriceId: string;
-  };
+  product: IProduct;
 }
 
 export default function Product({ product }: ProductProps) {
-  const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
-    useState(false);
+  const { addToCart, checkItemAlreadyExists } = useCart();
 
-  async function handleBuyProduct() {
-    setIsCreatingCheckoutSession(true);
+  const itemAlreadyInCart = checkItemAlreadyExists(product.id);
 
-    try {
-      const response = await axios.post("/api/checkout", {
-        priceId: product.defaultPriceId,
-      });
-      const { checkoutUrl } = response.data;
-      window.location.href = checkoutUrl;
-    } catch (error) {
-      setIsCreatingCheckoutSession(false);
-      alert("Falha ao redirecionar ao checkout");
-    }
-  }
   return (
     <ProductContainer>
       <ImageContainer>
@@ -47,8 +29,10 @@ export default function Product({ product }: ProductProps) {
         <h1>{product.name}</h1>
         <span>{product.price}</span>
         <p>{product.description}</p>
-        <button disabled={isCreatingCheckoutSession} onClick={handleBuyProduct}>
-          Colocar na sacola
+        <button disabled={itemAlreadyInCart} onClick={() => addToCart(product)}>
+          {itemAlreadyInCart
+            ? "Produto já está no carrinho"
+            : "Colocar na sacola"}
         </button>
       </ProductDetails>
     </ProductContainer>
@@ -82,6 +66,7 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({
           style: "currency",
           currency: "BRL",
         }).format((price.unit_amount as number) / 100),
+        numberPrice: price.unit_amount / 100,
         description: product.description,
         defaultPriceId: price.id,
       },

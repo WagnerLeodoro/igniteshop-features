@@ -1,22 +1,21 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useState, MouseEvent } from "react";
+import { GetStaticProps } from "next";
+
 import { Arrow } from "@/utils/Arrow";
 import { CartButton } from "@/components/CartButton";
 import { HomeContainer, Product } from "@/styles/pages/home";
 
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
-import { GetStaticProps } from "next";
 import { stripe } from "@/lib/stripe";
 import Stripe from "stripe";
 
+import { useCart } from "@/hooks/useCart";
+import { IProduct } from "@/context/CartContext";
+
 interface HomeProps {
-  products: {
-    id: string;
-    name: string;
-    imageUrl: string;
-    price: string;
-  }[];
+  products: IProduct[];
 }
 
 export default function Home({ products }: HomeProps) {
@@ -38,15 +37,27 @@ export default function Home({ products }: HomeProps) {
     },
   });
 
+  const { addToCart, checkItemAlreadyExists } = useCart();
+
+  function handleAddToCart(
+    e: MouseEvent<HTMLButtonElement>,
+    product: IProduct
+  ) {
+    e.preventDefault();
+    addToCart(product);
+    console.log(product);
+  }
+
   return (
     <HomeContainer ref={sliderRef} className="keen-slider">
       {products.map((product) => {
         return (
           <Product
-            href={`/product/${product.id}`}
             key={product.id}
+            href={`/product/${product.id}`}
             prefetch={false}
             className="keen-slider__slide"
+            passHref
           >
             <Image src={product.imageUrl} width={520} height={480} alt="" />
             <footer>
@@ -54,7 +65,12 @@ export default function Home({ products }: HomeProps) {
                 <strong>{product.name}</strong>
                 <span>{product.price}</span>
               </div>
-              <CartButton color="green" size="md" />
+              <CartButton
+                color="green"
+                size="md"
+                disabled={checkItemAlreadyExists(product.id)}
+                onClick={(e) => handleAddToCart(e, product)}
+              />
             </footer>
           </Product>
         );
@@ -100,6 +116,8 @@ export const getStaticProps: GetStaticProps = async () => {
         style: "currency",
         currency: "BRL",
       }).format((price.unit_amount as number) / 100),
+      numberPrice: price.unit_amount / 100,
+      defaultPriceId: price.id,
     };
   });
 
