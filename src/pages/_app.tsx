@@ -1,25 +1,20 @@
 import type { AppProps } from "next/app";
 
 import { globalStyles } from "@/styles/globals";
-import { Container, Header } from "@/styles/pages/app";
+import { Container } from "@/styles/pages/app";
 
-import logoImg from "../assets/logo.svg";
-import Image from "next/image";
-import { CartButton } from "@/components/CartButton";
-import Link from "next/link";
+import { ShoppingCartProvider } from "@/context/CartContext";
+import { Header } from "@/components/Header";
 
 globalStyles();
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <Container>
-      <Header>
-        <Link href={"/"}>
-          <Image src={logoImg} alt="" />
-        </Link>
-        <CartButton color="gray" size="sm" />
-      </Header>
-      <Component {...pageProps} />
-    </Container>
+    <ShoppingCartProvider>
+      <Container>
+        <Header />
+        <Component {...pageProps} />
+      </Container>
+    </ShoppingCartProvider>
   );
 }

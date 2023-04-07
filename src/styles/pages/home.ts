@@ -4,6 +4,7 @@ import Link from "next/link";
 export const HomeContainer = styled("main", {
   display: "flex",
   width: "100%",
+  marginLeft: "auto",
 });
 
 export const Product = styled(Link, {
@@ -108,15 +109,33 @@ export const ArrowButton = styled("button", {
 
 export const CartButtonContainer = styled("button", {
   display: "flex",
-  flexDirection: "row",
   alignItems: "center",
-  padding: 12,
-  gap: 12,
-  border: 0,
-  color: "white",
-  cursor: "pointer",
-
+  justifyContent: "center",
+  border: "none",
   borderRadius: 6,
+  position: "relative",
+
+  "&:disabled": {
+    opacity: 0.6,
+    cursor: "not-allowed",
+  },
+
+  span: {
+    background: "$green500",
+    color: "$white",
+    borderRadius: "50%",
+    width: "1.5rem",
+    height: "1.5rem",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "0.875rem",
+    fontWeight: "bold",
+    position: "absolute",
+    top: "calc(-1.5rem / 2)",
+    right: "calc(-1.5rem / 2)",
+    outline: "3px solid $gray900",
+  },
 
   variants: {
     color: {
